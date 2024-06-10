@@ -6,3 +6,4 @@
 - [golang-std-library](./golang-std-library/)
 - [unit-test](./unit-test/)
 - [goroutines](./goroutines/)
+- [generic](./generic/)
