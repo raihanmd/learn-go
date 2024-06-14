@@ -5,10 +5,11 @@ import (
 	"time"
 
 	_ "github.com/go-sql-driver/mysql"
+	// _ "github.com/mattn/go-sqlite3"
 )
 
 func CreateConnection() *sql.DB {
-	conn, err := sql.Open("mysql", "root:root@tcp(localhost:3306)/golang")
+	conn, err := sql.Open("mysql", "root:root@tcp(localhost:3306)/golang?parseTime=true")
 	if err != nil {
 		panic(err)
 	}
