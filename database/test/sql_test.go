@@ -191,3 +191,24 @@ func TestPrepareStatement(t *testing.T) {
 		assert.Nil(t, err)
 	}
 }
+
+func TestTransaction(t *testing.T) {
+	conn := golang_database.CreateConnection()
+	defer conn.Close()
+
+	tx, err := conn.Begin()
+	if err != nil {
+		panic(err)
+	}
+
+	_, err = tx.ExecContext(context.Background(), "INSERT INTO fruits (name) VALUES (?)", "avocado")
+	if err != nil {
+		tx.Rollback()
+		panic(err)
+	}
+
+	err = tx.Commit()
+	if err != nil {
+		panic(err)
+	}
+}
