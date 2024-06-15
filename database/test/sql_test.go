@@ -4,6 +4,7 @@ import (
 	"context"
 	"database/sql"
 	"golang_database"
+	"golang_database/model"
 	"testing"
 	"time"
 
@@ -14,12 +15,12 @@ func TestMain(m *testing.M) {
 	conn := golang_database.CreateConnection()
 	defer conn.Close()
 
-	conn.Exec("DELETE FROM users WHERE id = 'test'")
+	conn.Exec("DELETE FROM users WHERE id IN ('test', 'new')")
 	conn.Exec("DELETE FROM fruits")
 
 	m.Run()
 
-	conn.Exec("DELETE FROM users WHERE id = 'test'")
+	conn.Exec("DELETE FROM users WHERE id IN ('test', 'new')")
 }
 
 func TestInsert(t *testing.T) {
@@ -84,17 +85,6 @@ func TestUpdate(t *testing.T) {
 }
 
 func TestMultiDataType(t *testing.T) {
-	// ? Use sql.Null... for NULLABLE Data Type DB
-	type User struct {
-		Id        string
-		Name      string
-		Email     sql.NullString
-		Balance   int32
-		Rating    float64
-		BirthDate sql.NullTime
-		Married   bool
-		Created   time.Time
-	}
 
 	conn := golang_database.CreateConnection()
 	defer conn.Close()
@@ -105,13 +95,37 @@ func TestMultiDataType(t *testing.T) {
 	}
 	defer rows.Close()
 
-	expect := []User{
-		{"admin", "admin", sql.NullString{Valid: false}, 0, 0, sql.NullTime{Valid: false}, false, time.Date(2024, 6, 14, 19, 27, 26, 0, time.UTC)},
-		{"budi", "Budi", sql.NullString{Valid: false}, 50000, 2.5, sql.NullTime{Time: time.Date(2024, 6, 14, 0, 0, 0, 0, time.UTC), Valid: true}, false, time.Date(2024, 6, 14, 17, 7, 1, 0, time.UTC)},
-		{"eko", "Eko", sql.NullString{String: "eko@emial.co.id", Valid: true}, 100000, 3.4, sql.NullTime{Time: time.Date(2024, 6, 14, 0, 0, 0, 0, time.UTC), Valid: true}, false, time.Date(2024, 6, 14, 17, 6, 35, 0, time.UTC)},
+	expect := []model.User{
+		{
+			Id:        "admin",
+			Name:      "admin",
+			Email:     sql.NullString{Valid: false},
+			Balance:   0,
+			Rating:    0,
+			BirthDate: sql.NullTime{Valid: false},
+			Married:   false,
+			Created:   time.Date(2024, 6, 14, 19, 27, 26, 0, time.UTC)},
+		{
+			Id:        "budi",
+			Name:      "Budi",
+			Email:     sql.NullString{Valid: false},
+			Balance:   50000,
+			Rating:    2.5,
+			BirthDate: sql.NullTime{Time: time.Date(2024, 6, 14, 0, 0, 0, 0, time.UTC), Valid: true},
+			Married:   false,
+			Created:   time.Date(2024, 6, 14, 17, 7, 1, 0, time.UTC)},
+		{
+			Id:        "eko",
+			Name:      "Eko",
+			Email:     sql.NullString{String: "eko@emial.co.id", Valid: true},
+			Balance:   100000,
+			Rating:    3.4,
+			BirthDate: sql.NullTime{Time: time.Date(2024, 6, 14, 0, 0, 0, 0, time.UTC), Valid: true},
+			Married:   false,
+			Created:   time.Date(2024, 6, 14, 17, 6, 35, 0, time.UTC)},
 	}
 
-	var actual = []User{}
+	var actual = []model.User{}
 
 	for rows.Next() {
 		var (
@@ -129,7 +143,7 @@ func TestMultiDataType(t *testing.T) {
 			panic(err)
 		}
 
-		actual = append(actual, User{
+		actual = append(actual, model.User{
 			Id:        id,
 			Name:      name,
 			Email:     email,
