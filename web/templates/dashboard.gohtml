@@ -1,0 +1,25 @@
+{{template "header" .}}
+    {{if .IsAdmin}}
+    <p>Hello Admin</p>
+    {{else}}
+    <p>Hello User</p>
+    {{end}}
+    {{if gt .Count 10}}
+    <p>Count is greater than 10</p>
+    {{else}}
+    <p>Count is less or equal than 10</p>
+    {{end}}
+    <p>Hobbies : 
+      {{range $i, $hobby := .Hobbies}} 
+      <p>{{$i}}. {{$hobby}}</p>
+      {{else}}
+      <p>No Hobbies</p>
+      {{end}}
+    </p>
+    {{with .Address}}
+    <p>street: {{.Street}}, city: {{.City}}</p>
+    {{else}}
+    <p>No address</p>
+    {{end}}
+    {{template "test"}}
+{{template "footer"}}
