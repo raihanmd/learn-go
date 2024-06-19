@@ -9,7 +9,7 @@
     {{else}}
     <p>Count is less or equal than 10</p>
     {{end}}
-    <p>Hobbies : 
+    <p>Hobbies : {{len .Hobbies}}
       {{range $i, $hobby := .Hobbies}} 
       <p>{{$i}}. {{$hobby}}</p>
       {{else}}
@@ -22,4 +22,5 @@
     <p>No address</p>
     {{end}}
     {{template "test"}}
+    {{sayHello "Lynx"}}
 {{template "footer"}}
