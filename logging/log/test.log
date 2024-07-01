@@ -1,0 +1,4 @@
+{"L":"ERROR","T":"2024-07-02T08:51:33.082+0700","C":"logging/log_test.go:27","M":"Error","S":"logging.TestLog\n\td:/golang-projects/logging/log_test.go:27\ntesting.tRunner\n\tC:/Program Files/Go/src/testing/testing.go:1689"}
+{"level":"info","ts":1719885175.0438812,"caller":"logging/log_test.go:26","msg":"level","level":"debug"}
+{"level":"error","ts":1719885175.0444684,"caller":"logging/log_test.go:27","msg":"Error","stacktrace":"logging.TestLog\n\td:/golang-projects/logging/log_test.go:27\ntesting.tRunner\n\tC:/Program Files/Go/src/testing/testing.go:1689"}
+{"level":"info","ts":1719885175.0444684,"caller":"logging/log_test.go:28","msg":"failed to fetch URL","url":"url","attempt":3,"backoff":1}
