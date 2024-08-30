@@ -1,0 +1,12 @@
+{
+  "app": {
+    "name": "go-viper",
+    "version": "1.0.0",
+    "author": "viper"
+  },
+  "database": {
+    "database": "Postgres",
+    "host": "localhost",
+    "port": 5432
+  }
+}
