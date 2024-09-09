@@ -25,5 +25,22 @@ func NewRouter() *fiber.App {
 		})
 	})
 
+	app.Get("/protected", func(c fiber.Ctx) error {
+		auth := c.Get("Authorization")
+
+		if auth != "admin" {
+			return c.Status(fiber.StatusUnauthorized).JSON(web.WebErrorResponse{
+				Code:    http.StatusUnauthorized,
+				Message: "Unauthorized",
+			})
+		}
+
+		return c.JSON(web.WebSuccessResponse[fiber.Map]{
+			Code:    http.StatusOK,
+			Message: "OK",
+			Payload: fiber.Map{"message": "Hello, World!"},
+		})
+	})
+
 	return app
 }

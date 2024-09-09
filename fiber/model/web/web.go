@@ -5,3 +5,8 @@ type WebSuccessResponse[T any] struct {
 	Message string `json:"message"`
 	Payload T      `json:"payload"`
 }
+
+type WebErrorResponse struct {
+	Code    int    `json:"code"`
+	Message string `json:"message"`
+}
