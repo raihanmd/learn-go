@@ -1,4 +1,4 @@
-package test
+package main
 
 import (
 	"bytes"
@@ -15,7 +15,9 @@ import (
 
 	"github.com/go-playground/validator/v10"
 	"github.com/gofiber/fiber/v3"
+	"github.com/gofiber/fiber/v3/client"
 	"github.com/gofiber/fiber/v3/middleware/cors"
+	"github.com/gofiber/fiber/v3/middleware/static"
 	"github.com/stretchr/testify/assert"
 )
 
@@ -245,4 +247,53 @@ func TestGroup(t *testing.T) {
 	json.Unmarshal(bytes, &resJson)
 
 	assert.Equal(t, "Product 1", resJson["products"].([]interface{})[0].(map[string]interface{})["name"])
+}
+
+func TestStatic(t *testing.T) {
+	app.Use("/static", static.New("./upload"))
+
+	req := httptest.NewRequest(http.MethodGet, "/static/text.txt", nil)
+
+	res, err := app.Test(req)
+
+	assert.Nil(t, err)
+	assert.Equal(t, 200, res.StatusCode)
+
+	bytes, _ := io.ReadAll(res.Body)
+
+	assert.Equal(t, fileSource, bytes)
+}
+
+func TestCustomMiddleware(t *testing.T) {
+	app.Use("/api", func(c fiber.Ctx) error {
+		fmt.Println("Before Handler")
+		err := c.Next()
+		fmt.Println("After Handler")
+		return err
+	})
+
+	app.Get("/api/middleware", func(c fiber.Ctx) error {
+		fmt.Println("Im not a middleware")
+		return c.SendString("Hello, World!")
+	})
+
+	req := httptest.NewRequest(http.MethodGet, "/api/middleware", nil)
+
+	res, err := app.Test(req)
+
+	assert.Nil(t, err)
+	assert.Equal(t, 200, res.StatusCode)
+
+	bytes, _ := io.ReadAll(res.Body)
+
+	assert.Equal(t, "Hello, World!", string(bytes))
+}
+
+func TestClient(t *testing.T) {
+	cc := client.New()
+
+	res, err := cc.Get("https://jsonplaceholder.typicode.com/todos/1")
+
+	assert.Nil(t, err)
+	assert.Equal(t, 200, res.StatusCode())
 }
