@@ -290,7 +290,7 @@ func TestCustomMiddleware(t *testing.T) {
 }
 
 func TestClient(t *testing.T) {
-	cc := client.New()
+	cc := client.C()
 
 	res, err := cc.Get("https://jsonplaceholder.typicode.com/todos/1")
 
